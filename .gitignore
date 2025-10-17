@@ -17,6 +17,11 @@ docs_source/
 mkdocs.yml
 documentation_update_instructions.md
 index.md
+build-docs.sh
+
+# Not needed in repo
+_config.yml
+OPaL_testingUI.ipynb
 
 # Keep docs/ tracked for GitHub Pages deployment
 # docs/ is NOT ignored because GitHub Pages serves from it
