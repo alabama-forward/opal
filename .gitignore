@@ -11,7 +11,15 @@ ENV/
 # MkDocs
 site/
 .cache/
-# Note: docs/ is NOT ignored because GitHub Pages serves from it
+
+# Documentation source - keep private
+docs_source/
+mkdocs.yml
+documentation_update_instructions.md
+index.md
+
+# Keep docs/ tracked for GitHub Pages deployment
+# docs/ is NOT ignored because GitHub Pages serves from it
 
 # IDE
 .vscode/
