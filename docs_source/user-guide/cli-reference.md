@@ -52,8 +52,8 @@ python -m opal --url https://publicportal.alappeals.gov/portal/search/case/resul
 # Last 7 days of civil cases, excluding closed
 python -m opal.configurable_court_extractor --court civil --date-period 7d --exclude-closed
 
-# Last month of criminal cases, CSV output
-python -m opal.configurable_court_extractor --court criminal --date-period 1m --output-csv
+# Last month of criminal cases (JSON and CSV automatically generated)
+python -m opal.configurable_court_extractor --court criminal --date-period 1m
 ```
 
 ## Complete Parameter Reference
@@ -71,13 +71,18 @@ python -m opal.configurable_court_extractor --court criminal --date-period 1m --
 
 | Parameter | Description | Default | Example |
 |-----------|-------------|---------|---------|
-| `--court` | Court type (`civil`, `criminal`, `all`) | `all` | `civil` |
-| `--date-period` | Time period (`7d`, `1m`, `3m`, `6m`, `1y`) | `1m` | `7d` |
+| `--court` | Court type (`civil`, `criminal`, `supreme`) | `civil` | `civil` |
+| `--date-period` | Time period (`7d`, `1m`, `3m`, `6m`, `1y`, `custom`) | `1y` | `7d` |
 | `--exclude-closed` | Exclude closed cases | False | `--exclude-closed` |
-| `--output-csv` | Also save as CSV file | False | `--output-csv` |
 | `--case-number` | Search specific case number | None | `2024-CA-001` |
-| `--filed-after` | Cases filed after date (YYYY-MM-DD) | None | `2024-01-01` |
-| `--filed-before` | Cases filed before date (YYYY-MM-DD) | None | `2024-12-31` |
+| `--case-title` | Search by case title | None | `Smith v. Jones` |
+| `--start-date` | Custom range start date (YYYY-MM-DD) | None | `2024-01-01` |
+| `--end-date` | Custom range end date (YYYY-MM-DD) | None | `2024-12-31` |
+| `--max-pages` | Maximum pages to process | All | `10` |
+| `--output-prefix` | Prefix for output files | `court_cases` | `civil_appeals` |
+
+!!! note "CSV Output"
+    The court extractor automatically generates **both JSON and CSV** output files for every search. There's no need to specify a separate flag - both formats are always created.
 
 ## Getting Help
 
