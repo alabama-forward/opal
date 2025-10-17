@@ -106,6 +106,8 @@ class Parser1819(BaseParser):
                 if line.strip():
                     paragraph_texts.append(line.strip())
 
+        # Populate URL and line content
+        article['url'] = url
         article['line_count'] = len(paragraph_texts)
         for i, line in enumerate(paragraph_texts, 1):
             article['line_content'][f"line {i}"] = line
@@ -159,6 +161,8 @@ class ParserDailyNews(BaseParser):
                 if line.strip():
                     paragraph_texts.append(line.strip())
 
+        # Populate URL and line content
+        article['url'] = url
         article['line_count'] = len(paragraph_texts)
         for i, line in enumerate(paragraph_texts, 1):
             article['line_content'][f"line {i}"] = line

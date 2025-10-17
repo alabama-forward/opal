@@ -103,8 +103,7 @@ OPAL is a specialized web scraping framework that makes it easy to extract struc
       <h3>I want to extend OPAL or contribute</h3>
       <ul>
         <li>📐 <a href="developer/architecture/">Understand the Architecture</a></li>
-        <li>🔧 <a href="developer/creating-parsers/">Create Custom Parsers</a></li>
-        <li>🧪 <a href="developer/testing/">Testing Guidelines</a></li>
+        <li>🔧 <a href="developer/creating-custom-parsers/">Create Custom Parsers</a></li>
         <li>🤝 <a href="about/contributing/">Contribution Guide</a></li>
       </ul>
     </div>
