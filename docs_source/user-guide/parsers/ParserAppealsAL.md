@@ -26,10 +26,10 @@ The Alabama Appeals Court Parser (`ParserAppealsAL`) is OPAL's specialized parse
 ### Simple Extraction
 ```bash
 # Extract court cases from Alabama Appeals Court
-python -m opal --url "https://publicportal.alacourt.gov" --parser ParserAppealsAL
+python -m opal --url "https://publicportal.alappeals.gov/portal/search/case/results" --parser ParserAppealsAL
 
 # With max pages limit
-python -m opal --url "https://publicportal.alacourt.gov" --parser ParserAppealsAL --max_pages 5
+python -m opal --url "https://publicportal.alappeals.gov/portal/search/case/results" --parser ParserAppealsAL --max_pages 5
 ```
 
 ### Command Line Arguments
@@ -108,10 +108,10 @@ The parser extracts the following information for each case:
 ### Processing Multiple Pages
 ```bash
 # Process first 10 pages
-python -m opal --url "https://publicportal.alacourt.gov" --parser ParserAppealsAL --max_pages 10
+python -m opal --url "https://publicportal.alappeals.gov/portal/search/case/results" --parser ParserAppealsAL --max_pages 10
 
 # Process all available pages (use with caution)
-python -m opal --url "https://publicportal.alacourt.gov" --parser ParserAppealsAL
+python -m opal --url "https://publicportal.alappeals.gov/portal/search/case/results" --parser ParserAppealsAL
 ```
 
 ### Integration with Scripts
@@ -124,7 +124,7 @@ court_parser = IntegratedParser(ParserAppealsAL)
 
 # Process court website
 results = court_parser.process_site(
-    base_url="https://publicportal.alacourt.gov",
+    base_url="https://publicportal.alappeals.gov/portal/search/case/results",
     max_pages=5
 )
 
@@ -140,7 +140,7 @@ print(f"Found {data['total_cases']} cases")
 ```bash
 # Daily scrape with date in filename
 DATE=$(date +%Y-%m-%d)
-python -m opal --url "https://publicportal.alacourt.gov" --parser ParserAppealsAL --max_pages 3
+python -m opal --url "https://publicportal.alappeals.gov/portal/search/case/results" --parser ParserAppealsAL --max_pages 3
 # Output saved as: YYYY-MM-DD_ParserAppealsAL.json
 ```
 

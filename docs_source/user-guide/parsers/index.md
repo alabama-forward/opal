@@ -30,7 +30,7 @@ The primary parser for extracting appellate court decisions from Alabama's offic
 
 **Example:**
 ```bash
-python -m opal --url "https://publicportal.alacourt.gov" --parser ParserAppealsAL
+python -m opal --url "https://publicportal.alappeals.gov/portal/search/case/results" --parser ParserAppealsAL
 ```
 
 ### [1819 News Parser](./Parser1819.md)
