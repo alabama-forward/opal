@@ -1959,8 +1959,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Last 7 days of civil cases, excluding closed</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>python<span class="w"> </span>-m<span class="w"> </span>opal.configurable_court_extractor<span class="w"> </span>--court<span class="w"> </span>civil<span class="w"> </span>--date-period<span class="w"> </span>7d<span class="w"> </span>--exclude-closed
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Last month of criminal cases, CSV output</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>python<span class="w"> </span>-m<span class="w"> </span>opal.configurable_court_extractor<span class="w"> </span>--court<span class="w"> </span>criminal<span class="w"> </span>--date-period<span class="w"> </span>1m<span class="w"> </span>--output-csv
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Last month of criminal cases (JSON and CSV automatically generated)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>python<span class="w"> </span>-m<span class="w"> </span>opal.configurable_court_extractor<span class="w"> </span>--court<span class="w"> </span>criminal<span class="w"> </span>--date-period<span class="w"> </span>1m
 </code></pre></div></p>
 <h2 id="complete-parameter-reference">Complete Parameter Reference<a class="headerlink" href="#complete-parameter-reference" title="Permanent link">&para;</a></h2>
 <h3 id="main-opal-parameters">Main OPAL Parameters<a class="headerlink" href="#main-opal-parameters" title="Permanent link">&para;</a></h3>
@@ -2013,14 +2013,14 @@
 <tbody>
 <tr>
 <td><code>--court</code></td>
-<td>Court type (<code>civil</code>, <code>criminal</code>, <code>all</code>)</td>
-<td><code>all</code></td>
+<td>Court type (<code>civil</code>, <code>criminal</code>, <code>supreme</code>)</td>
+<td><code>civil</code></td>
 <td><code>civil</code></td>
 </tr>
 <tr>
 <td><code>--date-period</code></td>
-<td>Time period (<code>7d</code>, <code>1m</code>, <code>3m</code>, <code>6m</code>, <code>1y</code>)</td>
-<td><code>1m</code></td>
+<td>Time period (<code>7d</code>, <code>1m</code>, <code>3m</code>, <code>6m</code>, <code>1y</code>, <code>custom</code>)</td>
+<td><code>1y</code></td>
 <td><code>7d</code></td>
 </tr>
 <tr>
@@ -2030,31 +2030,47 @@
 <td><code>--exclude-closed</code></td>
 </tr>
 <tr>
-<td><code>--output-csv</code></td>
-<td>Also save as CSV file</td>
-<td>False</td>
-<td><code>--output-csv</code></td>
-</tr>
-<tr>
 <td><code>--case-number</code></td>
 <td>Search specific case number</td>
 <td>None</td>
 <td><code>2024-CA-001</code></td>
 </tr>
 <tr>
-<td><code>--filed-after</code></td>
-<td>Cases filed after date (YYYY-MM-DD)</td>
+<td><code>--case-title</code></td>
+<td>Search by case title</td>
+<td>None</td>
+<td><code>Smith v. Jones</code></td>
+</tr>
+<tr>
+<td><code>--start-date</code></td>
+<td>Custom range start date (YYYY-MM-DD)</td>
 <td>None</td>
 <td><code>2024-01-01</code></td>
 </tr>
 <tr>
-<td><code>--filed-before</code></td>
-<td>Cases filed before date (YYYY-MM-DD)</td>
+<td><code>--end-date</code></td>
+<td>Custom range end date (YYYY-MM-DD)</td>
 <td>None</td>
 <td><code>2024-12-31</code></td>
 </tr>
+<tr>
+<td><code>--max-pages</code></td>
+<td>Maximum pages to process</td>
+<td>All</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>--output-prefix</code></td>
+<td>Prefix for output files</td>
+<td><code>court_cases</code></td>
+<td><code>civil_appeals</code></td>
+</tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">CSV Output</p>
+<p>The court extractor automatically generates <strong>both JSON and CSV</strong> output files for every search. There's no need to specify a separate flag - both formats are always created.</p>
+</div>
 <h2 id="getting-help">Getting Help<a class="headerlink" href="#getting-help" title="Permanent link">&para;</a></h2>
 <h3 id="command-line-help">Command-Line Help<a class="headerlink" href="#command-line-help" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Main OPAL help</span>
