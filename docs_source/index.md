@@ -58,7 +58,7 @@ OPAL is a specialized web scraping framework that makes it easy to extract struc
     <div class="terminal-output">Successfully installed opal-scraper</div>
     <div style="margin-top: 0.5rem;">
       <span class="terminal-prompt">$</span>
-      <span class="terminal-command">python -m opal --url https://publicportal.alacourt.gov --parser ParserAppealsAL</span>
+      <span class="terminal-command">python -m opal --url https://publicportal.alappeals.gov --parser ParserAppealsAL</span>
     </div>
     <div class="terminal-output">
       Processing court case data...<br>

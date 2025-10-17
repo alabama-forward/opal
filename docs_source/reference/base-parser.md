@@ -5,105 +5,237 @@ title: "BaseParser API Reference"
 
 # BaseParser API Reference
 
-The `BaseParser` class provides the foundation for all OPAL parsers.
+The `BaseParser` class is an **abstract base class (ABC)** that provides the foundation for all OPAL parsers. It defines the interface that all parser implementations must follow.
+
+!!! note "Abstract Base Class"
+    `BaseParser` cannot be instantiated directly. You must create a subclass and implement the required abstract methods.
 
 ## Class Definition
 
 ```python
-class BaseParser:
-    def __init__(self, url, suffix="", max_pages=5)
+from abc import ABC, abstractmethod
+
+class BaseParser(ABC):
+    """Base class defining the interface for all parsers (news, court cases, etc.)"""
 ```
 
-## Constructor Parameters
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `url` | str | required | Base URL to scrape |
-| `suffix` | str | `""` | URL suffix for article links |
-| `max_pages` | int | `5` | Maximum pages to scrape |
-
-## Attributes
-
-### headers
-```python
-self.headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-}
-```
-HTTP headers for requests
-
-### logger
-```python
-self.logger: logging.Logger
-```
-Logger instance for debugging
+**Location:** `opal/parser_module.py`
 
 ## Methods
 
-### extract_article_data()
-```python
-def extract_article_data(self) -> List[Dict]
-```
-Main method to extract articles. Must be implemented by subclasses.
-
-**Returns**: List of dictionaries containing article data
-
-### get_article_links()
-```python
-def get_article_links(self, page_url: str) -> List[str]
-```
-Extract article URLs from a page. Must be implemented by subclasses.
-
-**Parameters**:
-- `page_url`: URL of the page to extract links from
-
-**Returns**: List of article URLs
-
-### parse_article()
-```python
-def parse_article(self, article_url: str) -> Dict
-```
-Parse individual article data. Must be implemented by subclasses.
-
-**Parameters**:
-- `article_url`: URL of the article to parse
-
-**Returns**: Dictionary with article data
-
-### save_to_json()
-```python
-def save_to_json(self, data: List[Dict], filename: str = "opal_output.json")
-```
-Save extracted data to JSON file.
-
-**Parameters**:
-- `data`: List of article dictionaries
-- `filename`: Output filename
-
-## Usage Example
+### make_request()
 
 ```python
-from opal.BaseParser import BaseParser
-
-class MyParser(BaseParser):
-    def __init__(self, url, suffix="", max_pages=5):
-        super().__init__(url, suffix, max_pages)
-        self.name = "MyParser"
-    
-    def extract_article_data(self):
-        # Implementation
-        pass
-    
-    def get_article_links(self, page_url):
-        # Implementation
-        pass
-    
-    def parse_article(self, article_url):
-        # Implementation
-        pass
-
-# Use the parser
-parser = MyParser("https://example.com", suffix="/articles", max_pages=10)
-data = parser.extract_article_data()
-parser.save_to_json(data)
+def make_request(self, urls: List[str]) -> Tuple[List[str], List[str]]
 ```
+
+Shared request functionality for all parsers. Makes HTTP requests to the provided URLs and returns both the response HTML and the successfully processed URLs.
+
+**Parameters:**
+- `urls` (List[str]): List of URLs to request
+
+**Returns:**
+- Tuple containing:
+  - `responses` (List[str]): List of HTML response text from successful requests
+  - `successful_urls` (List[str]): List of URLs that were successfully processed
+
+**Behavior:**
+- Handles request exceptions gracefully by skipping failed URLs
+- Includes a 5-second timeout per request
+- Prints progress information during processing
+- Raises `ValueError` if all URLs fail to process
+
+**Example:**
+```python
+parser = Parser1819()
+responses, urls = parser.make_request([
+    "https://1819news.com/article-1",
+    "https://1819news.com/article-2"
+])
+```
+
+### parse_article() *(Abstract)*
+
+```python
+@abstractmethod
+def parse_article(self, html: str, url: str) -> Dict[str, Any]
+```
+
+**Abstract method that must be implemented by all subclasses.** Parses a single article or data item from HTML content.
+
+**Parameters:**
+- `html` (str): HTML content of the page
+- `url` (str): URL of the page being parsed
+
+**Returns:**
+- `Dict[str, Any]`: Dictionary containing parsed data (structure varies by parser)
+
+**Implementation Required:** Every subclass must provide its own implementation of this method tailored to the specific website structure it's parsing.
+
+### parse_articles()
+
+```python
+def parse_articles(self, urls: List[str]) -> str
+```
+
+Orchestrates the parsing of multiple articles. Uses `make_request()` to fetch content and calls `parse_article()` for each successful response.
+
+**Parameters:**
+- `urls` (List[str]): List of article URLs to parse
+
+**Returns:**
+- `str`: JSON-formatted string containing all parsed articles
+
+**Example Output Structure:**
+```json
+[
+    {
+        "url": "https://example.com/article-1",
+        "title": "Article Title",
+        "content": "..."
+    },
+    {
+        "url": "https://example.com/article-2",
+        "title": "Another Article",
+        "content": "..."
+    }
+]
+```
+
+## Creating a Custom Parser
+
+To create a new parser, subclass `BaseParser` and implement the `parse_article()` method:
+
+### Basic Pattern
+
+```python
+from opal.parser_module import BaseParser
+from bs4 import BeautifulSoup
+from typing import Dict, Any
+
+class MyCustomParser(BaseParser):
+    """Parser for MyWebsite.com"""
+
+    def parse_article(self, html: str, url: str) -> Dict[str, Any]:
+        """
+        Parse an article from MyWebsite.com
+
+        Args:
+            html: HTML content of the page
+            url: URL of the article
+
+        Returns:
+            Dictionary with parsed article data
+        """
+        soup = BeautifulSoup(html, 'html.parser')
+
+        # Create result dictionary
+        article = {
+            'url': url,
+            'title': '',
+            'author': '',
+            'date': '',
+            'content': ''
+        }
+
+        # Extract data using BeautifulSoup
+        title_tag = soup.find('h1', class_='article-title')
+        if title_tag:
+            article['title'] = title_tag.text.strip()
+
+        author_tag = soup.find('span', class_='author-name')
+        if author_tag:
+            article['author'] = author_tag.text.strip()
+
+        # Add more extraction logic...
+
+        return article
+```
+
+### Using Your Custom Parser
+
+```python
+from opal.integrated_parser import IntegratedParser
+
+# Create parser instance
+parser = IntegratedParser(MyCustomParser)
+
+# Process articles
+results = parser.process_site(
+    base_url="https://mywebsite.com",
+    suffix="/articles",
+    max_pages=5
+)
+
+# Results are returned as JSON string
+import json
+data = json.loads(results)
+print(f"Parsed {len(data)} articles")
+```
+
+## Built-in Parser Implementations
+
+OPAL includes several built-in parsers that extend `BaseParser`:
+
+### Parser1819
+Parses articles from 1819 News (Alabama conservative news outlet).
+
+**Output Structure:**
+```python
+{
+    'url': str,           # Article URL
+    'title': str,         # Article title
+    'author': str,        # Author name
+    'date': str,          # Publication date
+    'line_count': int,    # Number of content lines
+    'line_content': {     # Article text by line
+        'line 1': str,
+        'line 2': str,
+        ...
+    }
+}
+```
+
+### ParserDailyNews
+Parses articles from Alabama Daily News.
+
+**Output Structure:** Same as Parser1819
+
+### ParserAppealsAL
+Parses court case data from Alabama Appeals Court portal. Uses Selenium for JavaScript-rendered content.
+
+**Output Structure:**
+```python
+{
+    'court': str,                    # Court name
+    'case_number': {                 # Case number with link
+        'text': str,
+        'link': str
+    },
+    'case_title': str,               # Case title
+    'classification': str,           # Case type
+    'filed_date': str,               # Filing date
+    'status': str                    # Case status
+}
+```
+
+## Error Handling
+
+`BaseParser` includes built-in error handling:
+
+- **Failed Requests:** Individual URL failures are logged but don't stop processing
+- **Empty Results:** If all URLs fail, raises `ValueError`
+- **Parsing Errors:** Subclasses should handle parsing errors gracefully
+
+### Best Practices
+
+1. **Handle Missing Elements:** Always check if HTML elements exist before accessing them
+2. **Provide Defaults:** Return default values (e.g., "Unknown Author") for missing data
+3. **Strip Whitespace:** Use `.strip()` on extracted text
+4. **Validate Data:** Ensure required fields are present in return dictionary
+
+## See Also
+
+- [Creating Custom Parsers Guide](../developer/creating-custom-parsers.md) - Detailed tutorial
+- [Parser1819 Documentation](parser-1819.md) - Example implementation
+- [IntegratedParser](parser-classes-overview.md) - Orchestration layer
