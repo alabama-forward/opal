@@ -5,15 +5,32 @@ description = "OPAL - Oppositional Positions in Alabama: Web scraper for Alabama
 authors = [
     {name = "Gabriel Cabán Cubero", email = "gabri@alforward.org"}
 ]
-license = {text = "MIT License"}
+license = {text = "MIT"}
 readme = "README.md"
+keywords = ["news", "parser", "web-scraping", "court-records", "alabama"]
 requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = [
     "requests",
     "beautifulsoup4",
     "selenium>=4.0.0",
     "webdriver-manager>=4.0.0"
 ]
+
+[project.urls]
+Homepage = "https://github.com/alabamaforward/opal"
+Repository = "https://github.com/alabamaforward/opal"
 
 [project.optional-dependencies]
 dev = [
@@ -31,5 +48,8 @@ docs = [
 opal = "opal.main:main"
 
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["opal"]
