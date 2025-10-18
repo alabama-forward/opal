@@ -76,31 +76,24 @@ class PrerequisitesChecker:
         print()
     
     def check_python_version(self):
-        """Check Python version compatibility"""
+        """Check Python version compatibility - requires Python 3.8+"""
         self.print_section("Python Environment")
-        
+
         version = sys.version_info
         version_str = f"{version.major}.{version.minor}.{version.micro}"
-        
+
         if version.major == 3 and version.minor >= 8:
             self.check_result(
-                "Python Version", 
-                "pass", 
+                "Python Version",
+                "pass",
                 f"Python {version_str} (compatible)"
-            )
-        elif version.major == 3 and version.minor >= 6:
-            self.check_result(
-                "Python Version", 
-                "warn", 
-                f"Python {version_str} (minimum supported, but 3.8+ recommended)",
-                "Consider upgrading to Python 3.8 or higher for best compatibility"
             )
         else:
             self.check_result(
-                "Python Version", 
-                "fail", 
-                f"Python {version_str} (incompatible)",
-                "Install Python 3.8 or higher from https://python.org"
+                "Python Version",
+                "fail",
+                f"Python {version_str} is not supported. OPAL requires Python 3.8 or higher",
+                "Install Python 3.8+ from https://python.org"
             )
     
     def check_pip(self):
